@@ -1,0 +1,17 @@
+from grandmaster import get_task
+
+
+{% if inputs.dataType == 'TEXT' %}
+    {% set input = "{ DataType = TEXT }" %}
+{% elif inputs.dataType == 'IMAGE' %}
+    {% set input = "{'dataType':'IMAGE'}" %}
+{% endif %}
+
+{% if outputs.dataType == 'LABEL' %}
+    {% set output = "{'dataType':'LABEL'}" %}
+{% elif outputs.dataType == 'BOUNDINGBOX' %}
+    {% set output = "{'dataType':'BOUNDINGBOX'}" %}
+{% endif %}
+
+task = get_task(inputs={{inputs}}, outputs={{ outputs }})
+task.inference( ... )
