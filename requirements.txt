@@ -1,0 +1,7 @@
+cuid
+torch
+transformers
+pillow
+datasets
+jinja2
+black
