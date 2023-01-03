@@ -26,7 +26,7 @@ class Code:
 
         x = template.render(inputs=dict(self.inputs), outputs=dict(self.outputs))
         x = re.sub(r"\n\s+", "\n\n", x)
-        return format_str(x, mode=FileMode())
+        return format_str(x, mode=FileMode(line_length=70))  # 88 default
 
     def get_curl(self):
         return "curl code"
