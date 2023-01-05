@@ -3,6 +3,7 @@ from typing import Any, List
 from grandmaster.Model import Model
 from grandmaster.Task import Task, create_task
 from grandmaster.helper import load_image_from_data
+
 from grandmaster.proto.mytypes import (
     InputsTypedDict,
     OutputsTypedDict,

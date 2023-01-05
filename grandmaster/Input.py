@@ -1,4 +1,7 @@
-from typing import Optional
+from typing import Any, Optional, Union
+from grandmaster.helper import load_image_from_url
+
+from grandmaster.proto.mytypes import InputsTypedDict, QueryTypedDict
 
 
 class Input:
@@ -26,3 +29,18 @@ class Audio:
     def __init__(self, language: Optional[str] = None):
         self.name = "audio"
         self.language = language
+
+
+from pathlib import Path
+
+
+def load_image(image: Union[Path, str]):
+    pass
+
+
+def parse_query(query: Any, inputs: InputsTypedDict) -> QueryTypedDict:
+    if inputs["dataType"] == "IMAGE":
+        if type(query) == str:
+            if "https://" in query or "http://" in query:
+                return load_image_from_url(query)
+    raise ValueError("query type not supported")

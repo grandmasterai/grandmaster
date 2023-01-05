@@ -31,9 +31,18 @@ class YOLOPlate(Model):
         self.model_name = "nickmuchi/yolos-small-rego-plates-detection"
 
     def tasks(self):
-        return [create_task(self.inputs, self.outputs, self.model, self.postprocess)]
+        return [
+            create_task(
+                self.model_name,
+                self.inputs,
+                self.outputs,
+                self.apply,
+                self.preprocess,
+                self.postprocess,
+            )
+        ]
 
-    def model(self, query: ImageQueryTypedDict) -> List[ResultBoundingBoxBoxDC]:  # TODO
+    def apply(self, query: ImageQueryTypedDict) -> List[ResultBoundingBoxBoxDC]:  # TODO
         image = load_image_from_data(query["image"])
         self.feature_extractor(images=image, return_tensors="pt")
         out = self.modelx(**x)  # type: ignore
@@ -41,6 +50,9 @@ class YOLOPlate(Model):
         return []
 
     def postprocess(self, x: Any) -> List[ResultBoundingBoxBoxDC]:
+        return x
+
+    def preprocess(self, x):
         return x
 
 
@@ -55,7 +67,16 @@ class FaceRecognition(Model):
         self.model_name = "community/face_recognition"
 
     def tasks(self):
-        return [create_task(self.inputs, self.outputs, self.apply, self.postprocess)]
+        return [
+            create_task(
+                self.model_name,
+                self.inputs,
+                self.outputs,
+                self.apply,
+                self.preprocess,
+                self.postprocess,
+            )
+        ]
 
     def apply(self, query: ImageQueryTypedDict) -> List[ResultBoundingBoxDC]:
         import face_recognition
@@ -71,4 +92,7 @@ class FaceRecognition(Model):
         return out
 
     def postprocess(self, x: Any) -> List[ResultBoundingBoxBoxDC]:
+        return x
+
+    def preprocess(self, x):
         return x

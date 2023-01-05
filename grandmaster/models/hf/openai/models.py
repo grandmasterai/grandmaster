@@ -25,13 +25,25 @@ class CLIP(Model):
 
         self.model_name = "openai/clip-vit-base-patch16"
 
-        self.inputs: InputsTypedDict = {"dataType": "IMAGE"}
-        self.outputs: OutputsTypedDict = {"dataType": "LABEL"}
+        self.inputs: List[InputsTypedDict] = [
+            {"dataType": "IMAGE"},
+            {"dataType": "TEXT"},
+        ]
+        self.outputs: List[OutputsTypedDict] = [{"dataType": "LABEL"}]
 
     def tasks(self):
-        return [create_task(self.inputs, self.outputs, self.model, self.postprocess)]
+        return [
+            create_task(
+                self.model_name,
+                self.inputs,
+                self.outputs,
+                self.apply,
+                self.preprocess,
+                self.postprocess,
+            )
+        ]
 
-    def model(self, query: ImageZeroShotQueryTypedDict) -> Any:
+    def apply(self, query: ImageZeroShotQueryTypedDict) -> Any:
         image = load_image_from_data(query["image"])
         processed = self.xprocessor()(
             text=query["candidate_labels"].split(","),
@@ -48,6 +60,9 @@ class CLIP(Model):
 
     def postprocess(self, x: Any) -> List[ResultLabelDC]:
         return x
+
+    def preprocess(self, query: ImageZeroShotQueryTypedDict) -> Any:
+        return query
 
 
 """

@@ -1,5 +1,6 @@
 from grandmaster import get_task
 
+{% set inputDataType = inputs.dataType.lower() %}
 
 {% if inputs.dataType == 'TEXT' %}
     {% set input = "{ DataType = TEXT }" %}
@@ -13,5 +14,5 @@ from grandmaster import get_task
     {% set output = "{'dataType':'BOUNDINGBOX'}" %}
 {% endif %}
 
-task = get_task(inputs={{inputs}}, outputs={{ outputs }})
-task.inference( ... )
+task = get_task(inputs={{inputs}}, outputs={{ outputs }}, model = "AUTO")
+task.inference( "{{ examples[0] }}" )

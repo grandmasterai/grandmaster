@@ -2,15 +2,13 @@ from abc import abstractmethod
 from cuid import cuid
 
 from typing import Any, Callable, Dict, Generic, List, Protocol, TypeVar
+from grandmaster.Input import parse_query
 from grandmaster.proto.mytypes import (
-    ImageZeroShotQueryTypedDict,
     InputsTypedDict,
     OutputsTypedDict,
-    QueryType,
     QueryTypedDict,
     RepresentationDC,
     ResultDC,
-    TextZeroShotQueryTypedDict,
 )
 
 Q = TypeVar("Q", bound=QueryTypedDict)
@@ -20,6 +18,9 @@ R = TypeVar("R", bound=ResultDC)
 
 class Task(Generic[Q, R, O]):
     id: str
+    model_name: str
+    inputs: InputsTypedDict
+    outputs: OutputsTypedDict
 
     def __init__(self, inputs, outputs):
         self.id = cuid()
@@ -30,13 +31,16 @@ class Task(Generic[Q, R, O]):
         ...
 
     def inference(self, query: Q) -> R:
-        x = self.model(query)
+        x = self.apply(query)
         return self.postprocess(x)
 
-    def model(self, query: Q) -> O:
+    def apply(self, query: Q) -> O:
         ...
 
-    def postprocess(self, x) -> R:
+    def preprocess(self, query):
+        return parse_query(query, self.inputs)
+
+    def postprocess(self, query) -> R:
         ...
 
     def check(self, i: InputsTypedDict, o: OutputsTypedDict) -> bool:
@@ -62,12 +66,20 @@ class Task(Generic[Q, R, O]):
     # ret
 
 
-def create_task(inputs: InputsTypedDict, outputs: OutputsTypedDict, model, postprocess):
+def create_task(
+    model_name: str,
+    inputs: InputsTypedDict,
+    outputs: OutputsTypedDict,
+    apply: Callable,
+    preprocess: Callable,
+    postprocess: Callable,
+):
     class TaskImpl(Task):
-        def __init__(self, inputs, outputs):
-            self.model = model
+        def __init__(self, model_name, inputs, outputs, apply, preprocess, postprocess):
+            super().__init__(inputs, outputs)
+            self.model_name = model_name
+            self.apply = apply
+            self.preprocess = preprocess
             self.postprocess = postprocess
-            self.inputs = inputs
-            self.outputs = outputs
 
-    return TaskImpl(inputs, outputs)
+    return TaskImpl(model_name, inputs, outputs, apply, preprocess, postprocess)
