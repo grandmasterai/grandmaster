@@ -1,7 +1,7 @@
 import re
 
 import jinja2
-from typing import Literal
+from typing import Any, Dict, List, Literal, Union
 from pathlib import Path
 from grandmaster.Example import get_examples_url
 
@@ -18,24 +18,40 @@ def get_template(template: Literal["python", "curl"]):
 
 
 class Code:
-    def __init__(self, inputs: InputsTypedDict, outputs: OutputsTypedDict):
+    def __init__(
+        self,
+        inputs: List[InputsTypedDict],
+        outputs: List[OutputsTypedDict],
+        isCloud: bool,
+    ):
 
-        self.inputs = inputs
-        self.outputs = outputs
+        self.inputs = [self.clean_param(i) for i in inputs]
+        self.outputs = [self.clean_param(o) for o in outputs]
+        self.isCloud = isCloud
 
-        self.inputs_d = {k: v for k, v in inputs.items() if v is not None}
-        self.outputs_d = {k: v for k, v in outputs.items() if v is not None}
+    @staticmethod
+    def clean_param(param: Any):
+        out = {}
+        if param.get("dataType") is not None:
+            out["dataType"] = param["dataType"]
+        if param.get("representation") is not None:
+            out["representation"] = param["representation"]
+        if param.get("of") is not None:
+            out["representation"] = param["representation"]
+
+        return out
 
     def get_python(self):
         template = get_template("python")
 
         x = template.render(
-            inputs=self.inputs_d,
-            outputs=self.outputs_d,
-            examples=get_examples_url(self.inputs),
+            inputs=self.inputs,
+            outputs=self.outputs,
+            examples=get_examples_url(self.inputs, self.outputs),
+            isCloud=self.isCloud,
         )
         x = re.sub(r"\n\s+", "\n\n", x)
-        return format_str(x, mode=FileMode(line_length=50))  # 88 default
+        return format_str(x, mode=FileMode(line_length=55))  # 88 default
 
     def get_curl(self):
         return "curl code"
@@ -44,5 +60,7 @@ class Code:
         return {"python": self.get_python(), "curl": self.get_curl()}
 
 
-def get_code(inputs: InputsTypedDict, outputs: OutputsTypedDict):
-    return Code(inputs, outputs).to_json()
+def get_code(
+    inputs: List[InputsTypedDict], outputs: List[OutputsTypedDict], isCloud: bool
+):
+    return Code(inputs, outputs, isCloud).to_json()

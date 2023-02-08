@@ -25,12 +25,6 @@ class Prompt:
         self.name = "prompt"
 
 
-class Audio:
-    def __init__(self, language: Optional[str] = None):
-        self.name = "audio"
-        self.language = language
-
-
 from pathlib import Path
 
 
@@ -44,3 +38,11 @@ def parse_query(query: Any, inputs: InputsTypedDict) -> QueryTypedDict:
             if "https://" in query or "http://" in query:
                 return load_image_from_url(query)
     raise ValueError("query type not supported")
+
+
+from pydantic import BaseModel
+
+
+class Audio(BaseModel):
+    file: Any  #
+    language: Optional[str] = None

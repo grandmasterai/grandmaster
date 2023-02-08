@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from cuid import cuid
 
-from typing import Any, Callable, Dict, Generic, List, Protocol, TypeVar
+from typing import Callable, Generic, TypeVar
 from grandmaster.Input import parse_query
 from grandmaster.proto.mytypes import (
     InputsTypedDict,
@@ -68,11 +68,11 @@ class Task(Generic[Q, R, O]):
 
 def create_task(
     model_name: str,
-    inputs: InputsTypedDict,
-    outputs: OutputsTypedDict,
-    apply: Callable,
-    preprocess: Callable,
-    postprocess: Callable,
+    # inputsType: List[TaskInputType],
+    # outputs: OutputsTypedDict,
+    # apply: Callable,
+    # preprocess: Callable,
+    # postprocess: Callable,
 ):
     class TaskImpl(Task):
         def __init__(self, model_name, inputs, outputs, apply, preprocess, postprocess):

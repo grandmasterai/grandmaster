@@ -123,3 +123,11 @@ QueryType = Union[
     Type[TextZeroShotQueryTypedDict],
     Type[AudioQueryTypedDict],
 ]
+
+
+# Task
+
+
+class TaskTypedDict(TypedDict):
+    inputs: InputsTypedDict
+    outputs: OutputsTypedDict

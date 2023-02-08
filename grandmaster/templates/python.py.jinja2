@@ -1,18 +1,10 @@
-from grandmaster import get_task
+import grandmaster
 
-{% set inputDataType = inputs.dataType.lower() %}
-
-{% if inputs.dataType == 'TEXT' %}
-    {% set input = "{ DataType = TEXT }" %}
-{% elif inputs.dataType == 'IMAGE' %}
-    {% set input = "{'dataType':'IMAGE'}" %}
+{% if isCloud %}
+    grandmaster.api_key = os.getenv("GRANDMASTER_API_KEY")
+    {% set cloud = ", cloud=True" %}
 {% endif %}
 
-{% if outputs.dataType == 'LABEL' %}
-    {% set output = "{'dataType':'LABEL'}" %}
-{% elif outputs.dataType == 'BOUNDINGBOX' %}
-    {% set output = "{'dataType':'BOUNDINGBOX'}" %}
-{% endif %}
-
-task = get_task(inputs={{inputs}}, outputs={{ outputs }}, model = "AUTO")
+{{ extra }}
+task = grandmaster.get_task(inputs={{inputs}}, outputs={{ outputs }}, model = "AUTO" {{ cloud }})
 task.inference( "{{ examples[0] }}" )

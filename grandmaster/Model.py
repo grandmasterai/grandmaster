@@ -1,5 +1,5 @@
 from inspect import signature
-from typing import Any, Callable, Dict, Optional, Protocol
+from typing import Any, Dict, Optional, Protocol
 from abc import abstractmethod
 
 from typing import List
@@ -10,8 +10,6 @@ from grandmaster.proto.mytypes import (
     InputsTypedDict,
     OutputsTypedDict,
     QueryType,
-    QueryTypedDict,
-    ResultDC,
     ResultType,
     TextZeroShotQueryTypedDict,
 )
@@ -22,6 +20,7 @@ from inspect import signature, _empty
 class Model(Protocol):
 
     model_name: str
+    settings: Dict[str, Any] = {}
 
     @abstractmethod
     def tasks(self) -> List[Task]:

@@ -3,7 +3,6 @@ from grandmaster.Model import Model
 from grandmaster.Task import create_task
 from grandmaster.helper import load_image_from_data
 from grandmaster.proto.mytypes import (
-    AudioQueryTypedDict,
     ImageZeroShotQueryTypedDict,
     InputsType,
     InputsTypedDict,
@@ -30,6 +29,10 @@ class CLIP(Model):
             {"dataType": "TEXT"},
         ]
         self.outputs: List[OutputsTypedDict] = [{"dataType": "LABEL"}]
+
+    def load(self):
+        self.xmodel()
+        self.xprocessor()
 
     def tasks(self):
         return [
@@ -63,19 +66,3 @@ class CLIP(Model):
 
     def preprocess(self, query: ImageZeroShotQueryTypedDict) -> Any:
         return query
-
-
-"""
-class Whisper(Model):
-    def __init__(self):
-        from whisper import load_model
-        self.model_name = "openai/whisper-base"
-        self.modelx = load_model("base")
-        
-    def model(self, query : AudioQueryTypedDict) -> :
-        # TODO
-        # query["audio"]
-        result = self.modelx.transcribe() # type: ignore
-        text : str = result["text"] # type: ignore
-        return ResultsDataClass(results=ResultText(text=text))
-"""

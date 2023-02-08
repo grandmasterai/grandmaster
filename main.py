@@ -1,5 +1,10 @@
 from grandmaster import get_task
-from grandmaster.helper import get_audio, load_image_data_from_url, load_image_from_data, load_image_from_url
+from grandmaster.helper import (
+    get_audio,
+    load_image_data_from_url,
+    load_image_from_data,
+    load_image_from_url,
+)
 from grandmaster.proto.mytypes import ImageQueryTypedDict, ImageZeroShotQueryTypedDict
 
 if 1:
@@ -8,11 +13,14 @@ if 1:
         inputs={"dataType": "IMAGE"},
         outputs={"dataType": "LABEL"},
     )
-    puppy : bytes = load_image_data_from_url(
+    puppy: bytes = load_image_data_from_url(
         "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg"
     )
     if task is not None:
-        query : ImageZeroShotQueryTypedDict = {"image": puppy, "candidate_labels": ["dog", "cat"]}
+        query: ImageZeroShotQueryTypedDict = {
+            "image": puppy,
+            "candidate_labels": ["dog", "cat"],
+        }
         out = task.inference(query)
         print(out)
     else:
@@ -34,7 +42,9 @@ if 0:
         inputs={"dataType": "image", "representation": "car"},
         outputs={"dataType": "boundingbox", "representation": "plate"},
     )
-    car = load_image_from_url("https://drive.google.com/uc?id=1p9wJIqRz3W50e2f_A0D8ftla8hoXz4T5")
+    car = load_image_from_url(
+        "https://drive.google.com/uc?id=1p9wJIqRz3W50e2f_A0D8ftla8hoXz4T5"
+    )
     out = task.inference(car)
     print(out)
 
