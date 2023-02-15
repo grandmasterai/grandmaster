@@ -6,7 +6,7 @@ import requests
 
 import datasets
 
-from grandmaster.proto.mytypes import ImageZeroShotQueryTypedDict
+from todo.mytypes import ImageZeroShotQueryTypedDict
 
 
 def load_image_data_from_url(url: str) -> bytes:

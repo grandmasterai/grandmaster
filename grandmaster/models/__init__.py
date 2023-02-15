@@ -11,6 +11,6 @@ from grandmaster.Model import Model
 # from grandmaster.models.hf.facebook.models import Detr
 # from grandmaster.models.community.models import FaceRecognition, YOLOPlate
 
-from grandmaster.models.openai.clip.predict import VIT
+from grandmaster.models.openai.clip.predict import CLIP
 
-all_models = [VIT]  # , YOLOPlate, , Galactica, Whisper, ]
+all_models = [CLIP]  # , YOLOPlate, , Galactica, Whisper, ]

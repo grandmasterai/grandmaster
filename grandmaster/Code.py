@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Literal, Union
 from pathlib import Path
 
 from grandmaster.Example import get_examples_url
-from grandmaster.proto.mytypes import InputsTypedDict, OutputsTypedDict
+from todo.mytypes import InputsTypedDict, OutputsTypedDict
 
 from black import format_str, FileMode
 

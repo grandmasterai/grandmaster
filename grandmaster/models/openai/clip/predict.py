@@ -1,5 +1,5 @@
 from typing import List
-from grandmaster.Model import Model
+from grandmaster.Task import Task
 from grandmaster.inputs import Image, Label
 from grandmaster.outputs import LabelWithScore
 from grandmaster.tasks import ZeroShotImageClassification
@@ -63,8 +63,7 @@ class CLIP(Model):
         return query
 """
 
-
-class VIT(Model):
+class CLIP:
     task = ZeroShotImageClassification
     model_names = ["openai/clip-vit-large-patch14-336"]
 
@@ -77,3 +76,5 @@ class VIT(Model):
     ) -> List[LabelWithScore]:
         out = self.classifier(image, candidate_labels=candidate_labels)
         return []
+
+class CLIPForImageEmbeddings(Task):

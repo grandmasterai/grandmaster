@@ -2,7 +2,7 @@ from typing import Any, List
 from grandmaster.Model import Model
 from grandmaster.Task import create_task
 from grandmaster.helper import load_image_from_data
-from grandmaster.proto.mytypes import (
+from todo.mytypes import (
     ImageQueryTypedDict,
     InputsTypedDict,
     OutputsTypedDict,

@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import List, Optional
-from grandmaster.proto.mytypes import InputsTypedDict, OutputsTypedDict
+from todo.mytypes import InputsTypedDict, OutputsTypedDict
 
 from glob import glob
 

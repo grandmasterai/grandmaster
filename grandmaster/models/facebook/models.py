@@ -4,7 +4,7 @@ from grandmaster.Model import Model
 from grandmaster.Task import Task, create_task
 from grandmaster.helper import load_image_from_data
 
-from grandmaster.proto.mytypes import (
+from todo.mytypes import (
     InputsTypedDict,
     OutputsTypedDict,
     PromptQueryTypedDict,

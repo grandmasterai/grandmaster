@@ -1,7 +1,7 @@
 from typing import Any, Optional, Union
 from grandmaster.helper import load_image_from_url
 
-from grandmaster.proto.mytypes import InputsTypedDict, QueryTypedDict
+from todo.mytypes import InputsTypedDict, QueryTypedDict
 
 
 class Input:
