@@ -1,3 +1,4 @@
+"""
 from pathlib import Path
 from typing import List, Optional
 from todo.mytypes import InputsTypedDict, OutputsTypedDict
@@ -30,3 +31,4 @@ def example_path_to_url(path: Path):
     BASE = "http://localhost:3000"
     parts = path.parts
     return f"{BASE}/ex/{parts[-1]}"
+"""

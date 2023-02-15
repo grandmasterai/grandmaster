@@ -4,8 +4,6 @@ import jinja2
 from typing import Any, Dict, List, Literal, Union
 from pathlib import Path
 
-from grandmaster.Example import get_examples_url
-from todo.mytypes import InputsTypedDict, OutputsTypedDict
 
 from black import format_str, FileMode
 
@@ -70,7 +68,7 @@ def get_samples(task):
     return [
         {
             "lang": "Python",
-            "source": "python",
+            "source": " mustache ... {}  ",
         },
         {
             "lang": "CURL",
