@@ -1,17 +1,12 @@
-from typing import Any, List
+from typing import List
 from grandmaster.Model import Model
-from grandmaster.Task import create_task
-from grandmaster.helper import load_image_from_data
-from grandmaster.proto.mytypes import (
-    ImageZeroShotQueryTypedDict,
-    InputsType,
-    InputsTypedDict,
-    OutputsType,
-    OutputsTypedDict,
-    ResultLabelDC,
-)
+from grandmaster.inputs import Image, Label
+from grandmaster.outputs import LabelWithScore
+from grandmaster.tasks import ZeroShotImageClassification
 
+from transformers import pipeline
 
+"""
 class CLIP(Model):
     # image classification
     def __init__(self):
@@ -66,3 +61,19 @@ class CLIP(Model):
 
     def preprocess(self, query: ImageZeroShotQueryTypedDict) -> Any:
         return query
+"""
+
+
+class VIT(Model):
+    task = ZeroShotImageClassification
+    model_names = ["openai/clip-vit-large-patch14-336"]
+
+    def load_model(self):
+        model_name = "openai/clip-vit-large-patch14-336"
+        self.classifier = pipeline("zero-shot-image-classification", model=model_name)
+
+    def predict(
+        self, image: Image, candidate_labels: List[Label]
+    ) -> List[LabelWithScore]:
+        out = self.classifier(image, candidate_labels=candidate_labels)
+        return []

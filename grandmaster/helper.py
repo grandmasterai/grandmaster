@@ -9,13 +9,6 @@ import datasets
 from grandmaster.proto.mytypes import ImageZeroShotQueryTypedDict
 
 
-def load_image_from_url(url: str) -> ImageZeroShotQueryTypedDict:
-    # PIL.JpegImagePlugin.JpegImageFile
-    image = Image.open(requests.get(url, stream=True).raw)
-    out: ImageZeroShotQueryTypedDict = {"query": image}
-    return
-
-
 def load_image_data_from_url(url: str) -> bytes:
     # same as equests.get(url).content
     return requests.get(url, stream=True).raw.read()

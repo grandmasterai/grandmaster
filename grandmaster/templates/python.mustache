@@ -1,0 +1,10 @@
+import grandmaster
+
+{% if isCloud %}
+    grandmaster.api_key = os.getenv("GRANDMASTER_API_KEY")
+    {% set cloud = ", cloud=True" %}
+{% endif %}
+
+{{ extra }}
+task = grandmaster.get_task(inputs={{inputs}}, outputs={{ outputs }}, model = "AUTO" {{ cloud }})
+task.inference( "{{ examples[0] }}" )

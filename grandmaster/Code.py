@@ -1,21 +1,20 @@
 import re
-
 import jinja2
+
 from typing import Any, Dict, List, Literal, Union
 from pathlib import Path
-from grandmaster.Example import get_examples_url
 
+from grandmaster.Example import get_examples_url
 from grandmaster.proto.mytypes import InputsTypedDict, OutputsTypedDict
 
 from black import format_str, FileMode
 
-
+"""
 def get_template(template: Literal["python", "curl"]):
     file = (
         Path(__file__).resolve().parent / "templates" / f"{template}.py.jinja2"
     ).open()
     return jinja2.Template(file.read())
-
 
 class Code:
     def __init__(
@@ -64,3 +63,17 @@ def get_code(
     inputs: List[InputsTypedDict], outputs: List[OutputsTypedDict], isCloud: bool
 ):
     return Code(inputs, outputs, isCloud).to_json()
+"""
+
+
+def get_samples(task):
+    return [
+        {
+            "lang": "Python",
+            "source": "python",
+        },
+        {
+            "lang": "CURL",
+            "source": "...",
+        },
+    ]
