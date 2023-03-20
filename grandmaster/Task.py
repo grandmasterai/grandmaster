@@ -1,13 +1,15 @@
 import inspect
 from grandmaster import models
-from typing import Optional
+from typing import Optional, List, Literal
+
+from pydantic import BaseModel, create_model
 
 
 class Task:
-    def get_model(self, *args, **kwargs) -> models.Model:
+    def get_model(self, input) -> models.Model:
 
-        self.task_name = kwargs["task_name"]
-        self.model_name = kwargs["model_name"]
+        self.task_name = input.task_name
+        self.model_name = input.model_name
 
         for model in models.all_models:
             if model.task.name == self.task_name:
@@ -18,4 +20,18 @@ class Task:
         return self.get_model(*args, **kwargs)
 
 
-task = Task()
+from pydantic import BaseModel
+
+# TODO generate this dynamically
+class Input(BaseModel):
+    task_name: str
+    model_name: str
+
+
+def predict(input: Input):
+    task = Task()
+    model = task.get_model(input)
+    return model.prediction(input)
+
+
+# task = Task()

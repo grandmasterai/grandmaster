@@ -10,6 +10,13 @@ class LabelWithScore(BaseModel):
     score: float
 
 
+class BoundingBox(BaseModel):
+    xmin: float
+    xmax: float
+    ymin: float
+    ymax: float
+
+
 class Transcription(BaseModel):
     detected_language: str
     transcription: str

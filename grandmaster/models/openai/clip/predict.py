@@ -1,7 +1,8 @@
 from typing import List
 from grandmaster.inputs import Image, Label
 from grandmaster.outputs import LabelWithScore
-from grandmaster.tasks import ZeroShotImageClassification
+from grandmaster.tasks import ImageClassification
+from grandmaster.Model import Model
 
 from transformers import pipeline
 
@@ -62,17 +63,35 @@ class CLIP(Model):
         return query
 """
 
+from pydantic import BaseModel
 
-class CLIP:
-    task = ZeroShotImageClassification
-    model_names = ["openai/clip-vit-large-patch14-336"]
+
+class CLIP(ImageClassification):
+
+    model_name = "openai/clip-vit-large-patch14-336"
 
     def load_model(self):
         model_name = "openai/clip-vit-large-patch14-336"
         self.classifier = pipeline("zero-shot-image-classification", model=model_name)
 
     def predict(
-        self, image: Image, candidate_labels: List[Label]
+        self,
+        input: ImageClassification.Inputs,
+    ) -> List[LabelWithScore]:
+        out = self.classifier(input.image, candidate_labels=input.candidate_labels)
+        return out
+
+
+class CLIP2(ImageClassification):
+
+    model_name = "B"
+
+    def load_model(self):
+        model_name = "openai/clip-vit-large-patch14-336"
+        self.classifier = pipeline("zero-shot-image-classification", model=model_name)
+
+    def predict(
+        self, image: Image, candidate_labels: List[Label], size: int
     ) -> List[LabelWithScore]:
         out = self.classifier(image, candidate_labels=candidate_labels)
         return []

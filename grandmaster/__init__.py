@@ -1,4 +1,4 @@
-from grandmaster.Task import task
+from grandmaster.Task import predict
 
 from enum import Enum
 

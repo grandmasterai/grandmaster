@@ -1,3 +1,1 @@
-from pydantic import Field
-
-Input = Field
+from pydantic import Field, BaseModel
