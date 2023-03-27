@@ -70,6 +70,63 @@ class Galactica(Model):
     def postprocess(self, x: Any) -> ResultGeneratedTextDC:
         return x
 
+#-------------------------------------------------------------------------------#
+
+from typing import List
+from pydantic import BaseModel, Field
+from transformers import CLIPProcessor, CLIPModel, BatchEncoding
+import torch
+
+class ImageClassification(Model):
+    def __init__(self):
+        self.inputs: InputsTypedDict = {
+            "dataType": "HTTP",
+            "image": {
+                "type": "File",
+                "description": "Input image.",
+                # "example": "http://localhost:3000/ex/puppy.jpeg"
+            },
+            "candidate_labels": {
+                "type": "List",
+                "description": "List of candidate labels.",
+                "item_type": "str",
+                # "example": ["dog", "cat"],
+            },
+        }
+        self.outputs: OutputsTypedDict = {
+            "dataType": "HTTP",
+            "labels": {
+                "type": "List",
+                "description": "List of predicted labels with corresponding scores.",
+                "item_type": "LabelWithScore",
+            },
+        }
+        self.model_name = "openai/clip-vit-large-patch14-336"
+        self.processor = CLIPProcessor.from_pretrained(self.model_name)
+        self.model = CLIPModel.from_pretrained(self.model_name)
+
+    def tasks(self):
+        return [create_task(self.inputs, self.outputs, self.model, self.postprocess)]
+
+    def model(self, inputs: InputsTypedDict) -> OutputsTypedDict:
+        image = inputs["image"]
+        candidate_labels = inputs["candidate_labels"]
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        with torch.no_grad():
+            inputs = self.processor(images=image, texts=candidate_labels, return_tensors="pt", padding=True)
+            inputs = inputs.to(device)
+            outputs = self.model(**inputs, return_dict=True)
+            scores = torch.softmax(outputs.logits, dim=-1)
+            scores = scores.cpu().numpy()[0]
+            
+        results = [{"label": candidate_labels[i], "score": scores[i]} for i in range(len(candidate_labels))]
+        return {"labels": results}
+
+    def postprocess(self, outputs: OutputsTypedDict) -> List[LabelWithScore]:
+        return outputs["labels"]
+
+#-------------------------------------------------------------------------------#
 
 class Detr(Model):
     # ZeroShotObject Detection
